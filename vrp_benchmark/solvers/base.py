@@ -22,6 +22,7 @@ class VRPSolver(ABC):
     @abstractmethod
     def solve(self, instance: VRPInstance, time_limit: int = 30, **kwargs) -> VRPSolution:
         """
+        Solves VRP instance.
         Args:
             instance: VRP problem instance to solve
             time_limit
