@@ -35,7 +35,7 @@ except ImportError:
     ORToolsSolver = None
 
 __version__ = "0.1.0"
-__author__ = "Novak Rostyslav"
+__author__ = "Rostyslav Novak"
 __email__ = "novak.rostyslav@gmail.com"
 
 # Public API
