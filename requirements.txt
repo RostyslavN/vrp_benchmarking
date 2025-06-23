@@ -1,0 +1,14 @@
+# Core dependencies
+numpy>=1.20.0
+
+# VRP Solvers (optional - install based on availability)
+vrp>=0.4.0              # PyVRP - Hybrid Genetic Search solver
+ortools>=9.0.0          # Google OR-Tools - Constraint programming solver
+
+# Development dependencies (for testing and examples)
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Documentation
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.0.0
