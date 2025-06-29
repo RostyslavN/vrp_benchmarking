@@ -348,6 +348,7 @@ class VRPBenchmark:
                 for name, instance in self.instances.items()
             }
 
+        filepath = 'data/benchmark_results/' + filepath;
         with open(filepath, 'w') as f:
             json.dump(export_data, f, indent=2)
 

@@ -462,6 +462,7 @@ def export_solution_to_csv(solutions: List, filepath: str):
     """
     import csv
 
+    filepath = 'data/benchmark_results/' + filepath;
     with open(filepath, 'w', newline='') as csvfile:
         fieldnames = [
             'solver_name', 'instance_name', 'total_distance', 'num_routes',
