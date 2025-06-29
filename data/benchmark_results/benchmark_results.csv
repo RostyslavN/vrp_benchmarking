@@ -1,0 +1,5 @@
+solver_name,instance_name,total_distance,num_routes,solve_time,status,objective_value
+PyVRP,small_feasible,186.3301530089999,2,15.002066135406494,OPTIMAL,186.3301530089999
+OR-Tools,small_feasible,193.346,1,0.02841806411743164,OPTIMAL,193.346
+PyVRP,medium_feasible,462.19825295226406,3,20.00096297264099,OPTIMAL,462.19825295226406
+OR-Tools,medium_feasible,289.773,2,0.029983997344970703,OPTIMAL,289.773
