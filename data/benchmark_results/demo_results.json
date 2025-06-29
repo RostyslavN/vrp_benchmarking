@@ -1,0 +1,236 @@
+{
+  "metadata": {
+    "export_time": 1751237446.77884,
+    "num_results": 2,
+    "num_instances": 1,
+    "available_solvers": [
+      "PyVRP",
+      "OR-Tools"
+    ]
+  },
+  "results": [
+    {
+      "solver_name": "PyVRP",
+      "instance_name": "demo_small",
+      "routes": [
+        {
+          "vehicle_id": 0,
+          "locations": [
+            0,
+            6,
+            2,
+            0
+          ],
+          "total_distance": 93.8598396168452,
+          "total_demand": 19,
+          "total_time": 25.0
+        },
+        {
+          "vehicle_id": 1,
+          "locations": [
+            0,
+            5,
+            4,
+            3,
+            0
+          ],
+          "total_distance": 121.60895433290742,
+          "total_demand": 37,
+          "total_time": 37.0
+        }
+      ],
+      "total_distance": 215.46879394975264,
+      "total_time": 62.0,
+      "solve_time": 15.001959085464478,
+      "status": "OPTIMAL",
+      "objective_value": 215.46879394975264
+    },
+    {
+      "solver_name": "OR-Tools",
+      "instance_name": "demo_small",
+      "routes": [
+        {
+          "vehicle_id": 0,
+          "locations": [
+            0,
+            2,
+            6,
+            0
+          ],
+          "total_distance": 93.858,
+          "total_demand": 19,
+          "total_time": 25.0
+        },
+        {
+          "vehicle_id": 1,
+          "locations": [
+            0,
+            5,
+            1,
+            4,
+            3,
+            0
+          ],
+          "total_distance": 131.03500000000003,
+          "total_demand": 49,
+          "total_time": 45.0
+        }
+      ],
+      "total_distance": 224.89300000000003,
+      "total_time": 70.0,
+      "solve_time": 0.035067081451416016,
+      "status": "OPTIMAL",
+      "objective_value": 224.89300000000003
+    }
+  ],
+  "instances": {
+    "demo_small": {
+      "name": "demo_small",
+      "locations": [
+        {
+          "id": 0,
+          "x": 50.0,
+          "y": 50.0,
+          "demand": 0,
+          "service_time": 0,
+          "time_window_start": 0,
+          "time_window_end": 86400
+        },
+        {
+          "id": 1,
+          "x": 63.942679845788376,
+          "y": 2.5010755222666936,
+          "demand": 12,
+          "service_time": 8,
+          "time_window_start": 0,
+          "time_window_end": 86400
+        },
+        {
+          "id": 2,
+          "x": 22.321073814882276,
+          "y": 73.64712141640123,
+          "demand": 9,
+          "service_time": 14,
+          "time_window_start": 0,
+          "time_window_end": 86400
+        },
+        {
+          "id": 3,
+          "x": 42.192181968527045,
+          "y": 2.9797219438070344,
+          "demand": 11,
+          "service_time": 8,
+          "time_window_start": 0,
+          "time_window_end": 86400
+        },
+        {
+          "id": 4,
+          "x": 50.53552881033624,
+          "y": 2.6535969683863625,
+          "demand": 11,
+          "service_time": 15,
+          "time_window_start": 0,
+          "time_window_end": 86400
+        },
+        {
+          "id": 5,
+          "x": 70.13249735902359,
+          "y": 41.95198209616587,
+          "demand": 15,
+          "service_time": 14,
+          "time_window_start": 0,
+          "time_window_end": 86400
+        },
+        {
+          "id": 6,
+          "x": 27.819070823066273,
+          "y": 86.9300320792934,
+          "demand": 10,
+          "service_time": 11,
+          "time_window_start": 0,
+          "time_window_end": 86400
+        }
+      ],
+      "vehicles": [
+        {
+          "id": 0,
+          "capacity": 60,
+          "depot_id": 0,
+          "max_time": 86400
+        },
+        {
+          "id": 1,
+          "capacity": 60,
+          "depot_id": 0,
+          "max_time": 86400
+        }
+      ],
+      "distance_matrix": [
+        [
+          0.0,
+          49.502991301774536,
+          36.40479784373507,
+          47.66412247062035,
+          47.349431582002055,
+          21.68151383302205,
+          43.079239646606915
+        ],
+        [
+          49.502991301774536,
+          0.0,
+          82.42643953830748,
+          21.755763841005514,
+          13.408018559017279,
+          39.933543172997744,
+          91.83225922373245
+        ],
+        [
+          36.40479784373507,
+          82.42643953830748,
+          0.0,
+          73.40805328758591,
+          76.39460703636992,
+          57.363002692034875,
+          14.375802126503222
+        ],
+        [
+          47.66412247062035,
+          21.755763841005514,
+          73.40805328758591,
+          0.0,
+          8.349718200174218,
+          47.95308421262969,
+          85.17183158676413
+        ],
+        [
+          47.349431582002055,
+          13.408018559017279,
+          76.39460703636992,
+          8.349718200174218,
+          0.0,
+          43.91359982909079,
+          87.284334095474
+        ],
+        [
+          21.68151383302205,
+          39.933543172997744,
+          57.363002692034875,
+          47.95308421262969,
+          43.91359982909079,
+          0.0,
+          61.75314603725526
+        ],
+        [
+          43.079239646606915,
+          91.83225922373245,
+          14.375802126503222,
+          85.17183158676413,
+          87.284334095474,
+          61.75314603725526,
+          0.0
+        ]
+      ],
+      "problem_type": "CVRP"
+    }
+  }
+}

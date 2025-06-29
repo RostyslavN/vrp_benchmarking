@@ -1,35 +1,34 @@
 #!/usr/bin/env python3
 """
-Basic usage example for VRP Benchmarking API.
+VRP Benchmarking API - Complete Demonstration
 
-This example demonstrates how to:
-1. Initialize the benchmark API
-2. Create sample VRP instances
-3. Run individual solvers
+This example demonstrates the full capabilities of the VRP benchmarking API:
+1. Initialize the benchmark system
+2. Create sample VRP instances  
+3. Solve with individual algorithms
 4. Benchmark multiple solvers
-5. Compare and analyze results
-6. Export results
+5. Analyze and compare results
+6. Export data for further analysis
+7. Create custom problem instances
 
-Run this example with:
-    python examples/basic_usage.py
+Run with: python examples/basic_usage.py
 """
 
-from vrp_benchmark import VRPBenchmark
 from vrp_benchmark import (
-    VRPBenchmark, create_sample_instance, create_clustered_instance
+    VRPBenchmark, VRPInstance, Location, Vehicle, create_distance_matrix
 )
 import logging
 import sys
 from pathlib import Path
 
-# Add the parent directory to path so we can import vrp_benchmark
+# Ensure we can import our package
 current_dir = Path(__file__).parent
 parent_dir = current_dir.parent
 sys.path.insert(0, str(parent_dir))
 
 
 def setup_logging():
-    """Configure logging for the example"""
+    """Configure logging for detailed execution tracking"""
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -40,70 +39,83 @@ def setup_logging():
     )
 
 
-def demo_basic_usage():
-    """Demonstrate basic API usage"""
+def demo_initialization():
+    """Step 1: Initialize the VRP benchmarking system"""
+    print("🚀 VRP Benchmarking API - Live Demonstration")
     print("=" * 60)
-    print("VRP Benchmarking API - basic usage demo")
-    print("=" * 60)
+    print("\n1. 🔧 Initializing VRP Benchmark System...")
 
-    # Initialize the benchmark API
-    print("\n1. Initializing VRP benchmark API...")
     benchmark = VRPBenchmark()
-
     available_solvers = benchmark.get_available_solvers()
-    print(f"Available solvers: {available_solvers}")
+
+    print(
+        f"✅ System ready with {len(available_solvers)} solvers: {available_solvers}")
 
     if not available_solvers:
-        print("No solvers available! Please install PyVRP and/or OR-Tools:")
-        print("  pip install pyvrp ortools")
+        print("❌ No solvers available! Please install:")
+        print("   pip install pyvrp ortools")
         return None
 
-    # Create sample instances
-    print("\n2. Creating sample VRP instances...")
+    return benchmark
 
-    # Small instance for quick testing
+
+def demo_instance_creation(benchmark):
+    """Step 2: Create diverse VRP problem instances"""
+    print("\n2. 📋 Creating VRP problem instances...")
+
+    # Small realistic logistics problem
     small_instance = benchmark.create_sample_instance(
-        name="small_feasible",
-        num_customers=6,
+        name="delivery_route",
+        num_customers=8,
         num_vehicles=2,
         vehicle_capacity=60,
-        demand_range=(5, 15)
+        demand_range=(5, 15),
+        seed=42  # Reproducible results
     )
+
     total_demand = sum(
         loc.demand for loc in small_instance.locations if loc.id != 0)
     total_capacity = sum(veh.capacity for veh in small_instance.vehicles)
-    print(
-        f"Created '{small_instance.name}': {small_instance.get_num_customers()} customers")
-    print(f"  Total demand: {total_demand}, Total capacity: {total_capacity}")
+    utilization = (total_demand / total_capacity) * 100
 
-    # Medium instance
+    print(f"📦 Created '{small_instance.name}':")
+    print(f"   • {small_instance.get_num_customers()} delivery locations")
+    print(f"   • {len(small_instance.vehicles)} delivery trucks")
+    print(f"   • Capacity utilization: {utilization:.1f}%")
+
+    # Medium distribution problem
     medium_instance = benchmark.create_sample_instance(
-        name="medium_feasible",
-        num_customers=10,
+        name="distribution_network",
+        num_customers=12,
         num_vehicles=3,
         vehicle_capacity=80,
-        demand_range=(8, 20)
+        demand_range=(10, 25),
+        seed=42
     )
+
     total_demand = sum(
         loc.demand for loc in medium_instance.locations if loc.id != 0)
     total_capacity = sum(veh.capacity for veh in medium_instance.vehicles)
-    print(
-        f"Created '{medium_instance.name}': {medium_instance.get_num_customers()} customers")
-    print(f"  Total demand: {total_demand}, Total capacity: {total_capacity}")
+    utilization = (total_demand / total_capacity) * 100
+
+    print(f"🏭 Created '{medium_instance.name}':")
+    print(f"   • {medium_instance.get_num_customers()} distribution centers")
+    print(f"   • {len(medium_instance.vehicles)} vehicles")
+    print(f"   • Capacity utilization: {utilization:.1f}%")
 
     return benchmark
 
 
 def demo_individual_solving(benchmark):
-    """Demonstrate solving with individual solvers"""
-    print("\n3. Solving with individual solvers...")
+    """Step 3: Solve with individual algorithms"""
+    print("\n3. 🔍 Testing Individual Solver Performance...")
 
     available_solvers = benchmark.get_available_solvers()
-    instance_name = "small_feasible"
-
+    instance_name = "delivery_route"
     solutions = {}
+
     for solver_name in available_solvers:
-        print(f"\nSolving '{instance_name}' with {solver_name}...")
+        print(f"\n   🧮 Solving with {solver_name}...")
         try:
             solution = benchmark.solve(
                 instance_name=instance_name,
@@ -113,181 +125,222 @@ def demo_individual_solving(benchmark):
             solutions[solver_name] = solution
 
             if solution.status == "ERROR":
-                print(f"  ❌ {solver_name}: Failed to solve")
+                print(f"      ❌ Failed: {solution.status}")
             else:
-                print(f"  ✅ {solver_name}: {solution.total_distance:.2f} "
-                      f"({len(solution.routes)} routes, {solution.solve_time:.3f}s)")
+                print(f"      ✅ Success: {solution.total_distance:.2f} units")
+                print(
+                    f"         Routes: {len(solution.routes)}, Time: {solution.solve_time:.2f}s")
 
         except Exception as e:
-            print(f"  ❌ {solver_name}: Exception - {e}")
+            print(f"      ❌ Exception: {e}")
 
     return solutions
 
 
-def demo_benchmarking(benchmark):
-    """Demonstrate benchmarking multiple solvers"""
-    print("\n4. Running benchmark comparison...")
+def demo_algorithmic_comparison(benchmark):
+    """Step 4: Compare multiple algorithms on same problem"""
+    print("\n4. ⚡ Algorithm Performance Comparison...")
 
-    instance_name = "medium_feasible"
-    print(f"Benchmarking instance: {instance_name}")
+    instance_name = "distribution_network"
+    print(f"   📊 Benchmarking on '{instance_name}'...")
 
     try:
-        instance_results = benchmark.benchmark(
+        results = benchmark.benchmark(
             instance_name=instance_name,
             time_limit=20
         )
 
-        print("Results:")
-        for solver_name, solution in instance_results.items():
-            if solution.status == "ERROR":
-                print(f"  ❌ {solver_name}: Failed")
+        print("   📈 Results:")
+        for solver_name, solution in results.items():
+            if solution.status != "ERROR":
+                print(f"      {solver_name:>10}: {solution.total_distance:>8.1f} units "
+                      f"({solution.solve_time:>5.2f}s)")
             else:
-                print(f"  ✅ {solver_name}: {solution.total_distance:.2f} "
-                      f"({solution.solve_time:.2f}s)")
+                print(f"      {solver_name:>10}: FAILED")
 
-        return instance_results
+        return results
 
     except Exception as e:
-        print(f"Failed to benchmark {instance_name}: {e}")
+        print(f"   ❌ Benchmark failed: {e}")
         return {}
 
 
-def demo_comparison_analysis(benchmark, solutions):
-    """Demonstrate solution comparison"""
-    print("\n5. Comparing solver performance...")
+def demo_performance_analysis(benchmark, solutions):
+    """Step 5: Analyze and compare algorithm performance"""
+    print("\n5. 📊 Performance Analysis...")
 
     if not solutions:
-        print("No solutions to compare")
+        print("   ⚠️  No solutions to analyze")
         return
 
     comparison = benchmark.compare_solutions(solutions)
 
     if 'best_solver' in comparison:
+        print(f"   🏆 Winner: {comparison['best_solver']}")
+        print(f"   🎯 Best distance: {comparison['best_distance']:.2f} units")
         print(
-            f"🏆 Best solution: {comparison['best_distance']:.2f} by {comparison['best_solver']}")
-        print(
-            f"📊 Success rate: {comparison['successful_solvers']}/{comparison['total_solvers']} solvers")
+            f"   ✅ Success rate: {comparison['successful_solvers']}/{comparison['total_solvers']} algorithms")
 
-        # Performance gaps
         if 'gaps' in comparison and len(comparison['gaps']) > 1:
-            print("📈 Performance gaps from best:")
+            print("   📈 Performance gaps from best:")
             for solver, gap in comparison['gaps'].items():
                 if gap > 0:
-                    print(f"    {solver}: +{gap:.1f}%")
+                    print(f"      {solver:>10}: +{gap:>5.1f}%")
                 else:
-                    print(f"    {solver}: Best solution")
+                    print(f"      {solver:>10}: OPTIMAL")
     else:
-        print("❌ No valid solutions found")
+        print("   ❌ No valid solutions found")
 
 
-def demo_solver_info(benchmark):
-    """Show detailed solver information"""
-    print("\n6. Solver Information:")
+def demo_solver_capabilities(benchmark):
+    """Step 6: Display solver technical information"""
+    print("\n6. 🔧 Solver Technical Specifications...")
 
     solver_info = benchmark.get_solver_info()
     for solver_name, info in solver_info.items():
-        print(f"\n{solver_name}:")
-        print(f"  Available: {info['available']}")
-        print(f"  Category: {info.get('category', 'unknown')}")
+        print(f"\n   {solver_name}:")
+        print(
+            f"      Status: {'🟢 Available' if info['available'] else '🔴 Unavailable'}")
+        print(f"      Type: {info.get('category', 'unknown').title()}")
         if 'algorithm' in info:
-            print(f"  Algorithm: {info['algorithm']}")
+            print(f"      Algorithm: {info['algorithm']}")
         if 'best_for' in info:
-            print(f"  Best for: {info['best_for']}")
+            print(f"      Optimal for: {info['best_for']}")
+        if 'competition_winner' in info and info['competition_winner']:
+            print(f"      🏆 Competition winner")
 
-def demo_export(benchmark):
-    """Demonstrate exporting results"""
-    print("\n7. Exporting results...")
 
-    # to JSON
-    json_file = "benchmark_results.json"
-    benchmark.export_results(json_file, include_instances=True)
-    print(f"Results exported to {json_file}")
+def demo_data_export(benchmark):
+    """Step 7: Export results for further analysis"""
+    print("\n7. 💾 Exporting Results...")
 
-    # to CSV
     try:
-        from vrp_benchmark.core.utils import export_solution_to_csv
-        csv_file = "benchmark_results.csv"
-        export_solution_to_csv(benchmark.results, csv_file)
-        print(f"Results exported to {csv_file}")
+        # Export to JSON (detailed)
+        json_file = "benchmark_results.json"
+        benchmark.export_results(json_file, include_instances=True)
+        print(f"   ✅ Detailed results: {json_file}")
+
+        # Export to CSV (summary)
+        try:
+            from vrp_benchmark.core.utils import export_solution_to_csv
+            csv_file = "benchmark_results.csv"
+            export_solution_to_csv(benchmark.results, csv_file)
+            print(f"   ✅ Summary data: {csv_file}")
+        except ImportError:
+            print("   ⚠️  CSV export requires additional setup")
+
     except Exception as e:
-        print(f"CSV export failed: {e}")
+        print(f"   ❌ Export failed: {e}")
+
 
 def demo_custom_problem():
-    """Demonstrate custom problem creation"""
-    print("\n7. Creating custom problem...")
+    """Step 8: Create and solve custom logistics problem"""
+    print("\n8. Custom problem creation...")
 
-    from vrp_benchmark import VRPInstance, Location, Vehicle, create_distance_matrix
+    print("   📍 Defining a real logistics scenario...")
 
-    # Simple 4-customer problem
+    # Real-world inspired problem: Food delivery service
     locations = [
-        Location(id=0, x=0, y=0, demand=0),      # Depot
-        Location(id=1, x=10, y=0, demand=10),    # Customer 1
-        Location(id=2, x=20, y=0, demand=15),    # Customer 2
-        Location(id=3, x=10, y=10, demand=12),   # Customer 3
-        Location(id=4, x=0, y=10, demand=8),     # Customer 4
+        Location(id=0, x=0, y=0, demand=0),        # Restaurant (depot)
+        Location(id=1, x=5, y=2, demand=12),       # Office building
+        Location(id=2, x=8, y=6, demand=8),        # Residential area
+        Location(id=3, x=3, y=7, demand=15),       # Shopping center
+        Location(id=4, x=1, y=5, demand=10),       # University campus
+        Location(id=5, x=6, y=1, demand=6),        # Hospital
     ]
 
-    vehicles = [Vehicle(id=0, capacity=30), Vehicle(id=1, capacity=30)]
+    vehicles = [
+        Vehicle(id=0, capacity=25),  # Delivery bike
+        Vehicle(id=1, capacity=35)   # Delivery car
+    ]
 
     custom_instance = VRPInstance(
-        name="custom_demo",
+        name="food_delivery",
         locations=locations,
         vehicles=vehicles,
         distance_matrix=create_distance_matrix(locations),
         problem_type="CVRP"
     )
 
-    print(f"Created custom instance:")
-    print(f"  Customers: {custom_instance.get_num_customers()}")
-    print(f"  Total demand: {custom_instance.get_total_demand()}")
-    print(f"  Total capacity: {sum(v.capacity for v in vehicles)}")
+    print(f"   🍕 Food delivery scenario:")
+    print(f"      • {custom_instance.get_num_customers()} delivery locations")
+    print(f"      • Total orders: {custom_instance.get_total_demand()} items")
+    print(f"      • Fleet capacity: {sum(v.capacity for v in vehicles)} items")
 
-    # Quick solve
+    # Solve the custom problem
     benchmark = VRPBenchmark()
     benchmark.load_instance(custom_instance)
 
     if benchmark.get_available_solvers():
-        print("  Testing with available solvers...")
-        results = benchmark.benchmark("custom_demo", time_limit=10)
+        print("   🚚 Optimizing delivery routes...")
+        results = benchmark.benchmark("food_delivery", time_limit=10)
 
         for solver_name, solution in results.items():
             if solution.status != "ERROR":
-                print(f"    ✅ {solver_name}: {solution.total_distance:.2f}")
+                print(f"      {solver_name}: {solution.total_distance:.1f} km "
+                      f"({len(solution.routes)} routes)")
+                # Show actual routes
+                for i, route in enumerate(solution.routes):
+                    customers = route.get_customer_sequence()
+                    if customers:
+                        route_str = " → ".join([f"Loc{c}" for c in customers])
+                        print(
+                            f"         Route {i+1}: Restaurant → {route_str} → Restaurant")
             else:
-                print(f"    ❌ {solver_name}: Failed")
+                print(f"      {solver_name}: Optimization failed")
+
+
+def demo_summary():
+    """Final summary of capabilities demonstrated"""
+    print("\n" + "=" * 60)
+    print("✅ VRP benchmarking API demo complete!")
+    print("=" * 60)
+    print("\n🎯 Capabilities:")
+    print("   ✓ Multi-algorithm VRP solving")
+    print("   ✓ Performance benchmarking & comparison")
+    print("   ✓ Custom problem modeling")
+    print("   ✓ Data export for analysis")
+    print("   ✓ Professional error handling")
+    print("   ✓ Extensible architecture")
+
+    print("\n📁 Generated files:")
+    print("   • benchmark_results.json (detailed results)")
+    print("   • benchmark_results.csv (summary data)")
+    print("   • vrp_benchmark.log (execution log)")
+
+    print("\n🔬 Perfect for operations research:")
+    print("   • Algorithm comparison studies")
+    print("   • Logistics optimization")
+    print("   • Academic research")
+    print("   • Industry applications")
+    print("=" * 60)
 
 
 def main():
-    """Main demo function"""
+    """Main demonstration orchestrator"""
     setup_logging()
 
     try:
-        print("🚀 Starting VRP Benchmarking API Demo")
-
-        benchmark = demo_basic_usage()
+        # Run complete demonstration
+        benchmark = demo_initialization()
         if benchmark is None:
             return
 
+        benchmark = demo_instance_creation(benchmark)
         solutions = demo_individual_solving(benchmark)
-        benchmark_results = demo_benchmarking(benchmark)
-        demo_comparison_analysis(benchmark, benchmark_results)
-        demo_solver_info(benchmark)
-        demo_export(benchmark)
+        comparison_results = demo_algorithmic_comparison(benchmark)
+        demo_performance_analysis(benchmark, comparison_results)
+        demo_solver_capabilities(benchmark)
+        demo_data_export(benchmark)
         demo_custom_problem()
-
-        print("\n" + "=" * 60)
-        print("✅ Demo completed successfully!")
-        print("\nGenerated files:")
-        print("  - benchmark_results.json (detailed results)")
-        print("  - benchmark_results.csv (summary data)")
-        print("  - vrp_benchmark.log (execution log)")
-        print("=" * 60)
+        demo_summary()
 
     except KeyboardInterrupt:
-        print("\n⏹️  Demo interrupted by user")
+        print("\n⏹️  Demonstration interrupted")
     except Exception as e:
-        print(f"\n❌ Demo failed with error: {e}")
-        logging.error(f"Demo failed: {e}", exc_info=True)
+        print(f"\n❌ Demonstration failed: {e}")
+        logging.error(f"Demo error: {e}", exc_info=True)
+        raise
 
 
 if __name__ == "__main__":
