@@ -183,3 +183,7 @@ class YourSolver(VRPSolver):
     def get_solver_name(self):
         return "YourSolver"
 ```
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
