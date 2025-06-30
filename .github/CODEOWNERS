@@ -1,0 +1,22 @@
+# Global ownership - you must approve all changes
+
+- @RostyslavN
+
+# Core API files require your review
+
+/vrp_benchmark/ @RostyslavN
+
+# Solver implementations are critical
+
+/vrp_benchmark/solvers/ @RostyslavN
+
+# Documentation changes need approval
+
+/docs/ @RostyslavN
+/README.md @RostyslavN
+
+# Configuration files require review
+
+/setup.py @RostyslavN
+/requirements.txt @RostyslavN
+/.github/ @RostyslavN
