@@ -1,4 +1,3 @@
-````markdown
 ---
 name: Bug Report
 about: Create a report to help improve the VRP Benchmarking API
@@ -48,7 +47,6 @@ from vrp_benchmark import VRPBenchmark
 benchmark = VRPBenchmark()
 # ... rest of the code
 ```
-````
 
 ## 📝 Error Output
 
@@ -71,7 +69,3 @@ If relevant, attach:
 - VRP instance files (JSON format)
 - Configuration files
 - Log files
-
-```
-
-```

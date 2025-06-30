@@ -1,4 +1,3 @@
-```markdown
 ---
 name: New Solver Integration
 about: Request integration of a new VRP solver
@@ -86,4 +85,3 @@ List any special requirements or dependencies.
 - [ ] I can provide testing
 - [ ] I can contribute documentation
 - [ ] I can provide benchmark instances
-```

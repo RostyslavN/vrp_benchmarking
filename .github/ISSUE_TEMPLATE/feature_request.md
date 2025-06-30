@@ -1,4 +1,3 @@
-```markdown
 ---
 name: Feature Request
 about: Suggest an idea for the VRP Benchmarking API
@@ -66,4 +65,3 @@ Add any other context, screenshots, research papers, or examples about the featu
 - [ ] Medium (would improve workflow)
 - [ ] High (blocking current work)
 - [ ] Critical (essential for research/production)
-```
