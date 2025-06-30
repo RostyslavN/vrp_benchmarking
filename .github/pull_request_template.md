@@ -1,4 +1,3 @@
-````markdown
 ## 📋 Pull Request description
 
 ### 🎯 Purpose
@@ -30,7 +29,6 @@ Detailed description of the changes:
 python tests/test_basic_functionality.py
 # ✅ All tests passed
 ```
-````
 
 ### 📊 Performance impact
 
@@ -76,7 +74,3 @@ Any additional information that reviewers should know:
 ### 📸 Screenshots (if applicable)
 
 Include screenshots for UI changes or visual improvements.
-
-```
-
-```
