@@ -1,4 +1,3 @@
-````markdown
 # Contributing to VRP Benchmarking API
 
 Thank you for your interest in contributing! This project aims to provide a unified platform for VRP algorithm comparison and benchmarking.
@@ -25,7 +24,6 @@ python tests/test_basic_functionality.py
 # Run code formatting
 black vrp_benchmark/
 ```
-````
 
 ## 🧪 Testing
 
@@ -106,7 +104,3 @@ Keep these principles in mind:
 - Check existing issues and documentation first
 
 Thank you for contributing to the VRP research community! 🚀
-
-```
-
-```
